@@ -15,15 +15,15 @@ function Header({ personalDetails }) {
       <h1>{personalDetails.fullName}</h1>
       <div>
         <div>
-          <img src="./src/assets/mail-icon.svg" width="25px" alt="" />
+          <img src="./public/mail-icon.svg" width="25px" alt="" />
           <p>{personalDetails.email}</p>
         </div>
         <div>
-          <img src="./src/assets/phone-icon.svg" width="25px" alt="" />
+          <img src="./public/phone-icon.svg" width="25px" alt="" />
           <p>{personalDetails.phoneNumber}</p>
         </div>
         <div>
-          <img src="./src/assets/location-icon.svg" width="25px" alt="" />
+          <img src="./public/location-icon.svg" width="25px" alt="" />
           <p>{personalDetails.address}</p>
         </div>
       </div>

@@ -287,7 +287,7 @@ function Educations({ educationDetails, setEducationDetails }) {
                 {education.school !== "" ? education.school : "Nil"}
               </h3>
               <img
-                src={`./src/assets/${
+                src={`./public/${
                   education.isVisible ? "eye-icon.svg" : "slashed-eye-icon.svg"
                 }`}
                 width="25px"
@@ -570,7 +570,7 @@ function Experiences({ experienceDetails, setExperienceDetails }) {
                 {experience.company === "" ? "Nil" : experience.company}
               </h3>
               <img
-                src={`./src/assets/${
+                src={`./public/${
                   experience.isVisible ? "eye-icon.svg" : "slashed-eye-icon.svg"
                 }`}
                 width="25px"
