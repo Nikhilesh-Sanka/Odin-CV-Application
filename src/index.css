@@ -126,6 +126,9 @@ body {
 /*--Education Form Styling*/
 
 /*--Educations styling*/
+.education h3 {
+  min-width: 100px;
+}
 .rendered-educations .education {
   background-color: white;
   height: 50px;

@@ -1,69 +1,83 @@
-export function Resume() {
+import { Fragment } from "react";
+
+export function Resume(props) {
   return (
     <>
-      <Header />
-      <MainResumeBody />
+      <Header {...props} />
+      <MainResumeBody {...props} />
     </>
   );
 }
 
-function Header() {
+function Header({ personalDetails }) {
   return (
     <div className="resume-header">
-      <h1>John Mueller</h1>
+      <h1>{personalDetails.fullName}</h1>
       <div>
         <div>
           <img src="./src/assets/mail-icon.svg" width="25px" alt="" />
-          <p>john2024@gmail.com</p>
+          <p>{personalDetails.email}</p>
         </div>
         <div>
           <img src="./src/assets/phone-icon.svg" width="25px" alt="" />
-          <p>+98392 92839</p>
+          <p>{personalDetails.phoneNumber}</p>
         </div>
         <div>
           <img src="./src/assets/location-icon.svg" width="25px" alt="" />
-          <p>London, UK</p>
+          <p>{personalDetails.address}</p>
         </div>
       </div>
     </div>
   );
 }
-function MainResumeBody() {
+function MainResumeBody(props) {
   return (
     <div className="resume-main">
-      <ResumeEducation />
-      <ResumeExperience />
+      <ResumeEducation {...props} />
+      <ResumeExperience {...props} />
     </div>
   );
 }
-function ResumeEducation() {
+function ResumeEducation({ educationDetails }) {
   return (
     <div className="resume-education">
       <h2>Education</h2>
-      <div className="resume-education-point">
-        <p>08/10/2024 - 09/11/2027</p>
-        <p>Wharton University</p>
-        <p>London, UK</p>
-        <p>Bachelor of Economics</p>
-      </div>
+      {educationDetails.educations
+        .filter((education) => education.isVisible)
+        .map((education) => {
+          return (
+            <Fragment key={education.id}>
+              <div className="resume-education-point">
+                <p>{`${education.startDate} - ${education.endDate}`}</p>
+                <p>{education.school}</p>
+                <p>{education.location}</p>
+                <p>{education.degree}</p>
+              </div>
+            </Fragment>
+          );
+        })}
     </div>
   );
 }
-function ResumeExperience() {
+function ResumeExperience({ experienceDetails }) {
   return (
     <div className="resume-experience">
       <h2>Experience</h2>
-      <div className="resume-experience-point">
-        <p>09/10/2027 - present</p>
-        <p>Microsoft Inc.</p>
-        <p>California, USA</p>
-        <p>VP of sales</p>
-        <p>
-          I am currently working in microsoft in california , it was a great
-          experience working there and i learned a lot , but since its a very
-          big organization i feel that i am not seen
-        </p>
-      </div>
+      {experienceDetails.experiences
+        .filter((experience) => experience.isVisible)
+        .map((experience) => {
+          return (
+            <Fragment key={experience.id}>
+              <div className="resume-experience-point">
+                <p>{`${experience.startDate} - ${experience.endDate}`}</p>
+                <p>{experience.company}</p>
+                <p>{experience.location}</p>
+                <p>{experience.position}</p>
+                <p>{experience.description}</p>
+              </div>
+            </Fragment>
+          );
+        })}
     </div>
   );
 }
