@@ -1,4 +1,15 @@
 import { Fragment } from "react";
+import {
+  closeFormNew,
+  addFormNew,
+  deleteField,
+  openAndEditFieldInForm,
+  changeVisibilityOfField,
+} from "./HelperFunctions.jsx";
+import {
+  initialCurrentEducationDetails,
+  initialCurrentExperienceDetails,
+} from "./Variable.jsx";
 
 export function PersonalDetailsForm({ personalDetails, setPersonalDetails }) {
   function changePersonalDetails(property, newValue) {
@@ -53,6 +64,9 @@ export function PersonalDetailsForm({ personalDetails, setPersonalDetails }) {
 }
 
 // Education Section
+
+/** Main Education Section */
+
 export function EducationSection({ educationDetails, setEducationDetails }) {
   function openCloseEducation() {
     let newState = educationDetails.isEducationOpen === true ? false : true;
@@ -63,6 +77,7 @@ export function EducationSection({ educationDetails, setEducationDetails }) {
     setEducationDetails(newEducationDetails);
   }
   return (
+    /*Displays the education form or educations + add-education-button based on the conditions */
     <div className="education-section">
       <h2 onClick={openCloseEducation}>Education</h2>
       {educationDetails.isFormOpen && educationDetails.isEducationOpen ? (
@@ -100,89 +115,31 @@ function EducationForm({ educationDetails, setEducationDetails }) {
     });
   }
   function closeForm() {
-    setEducationDetails({
-      ...educationDetails,
-      isFormOpen: false,
-      currentEducationBeingFilled: {
-        id: null,
-        school: "",
-        degree: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        isVisible: true,
-      },
-    });
+    closeFormNew(
+      setEducationDetails,
+      educationDetails,
+      "currentEducationBeingFilled",
+      initialCurrentEducationDetails
+    );
   }
   function addForm() {
-    if (currentEducationBeingFilled.id === null) {
-      let newEducationsArray = [...educationDetails.educations];
-      newEducationsArray.push({
-        ...currentEducationBeingFilled,
-        id: `${educationDetails.educations.length + 1}`,
-      });
-      let newEducationDetails = {
-        ...educationDetails,
-        educations: newEducationsArray,
-        currentEducationBeingFilled: {
-          id: null,
-          school: "",
-          degree: "",
-          startDate: "",
-          endDate: "",
-          location: "",
-          isVisible: true,
-        },
-        isFormOpen: false,
-      };
-      setEducationDetails(newEducationDetails);
-      return;
-    }
-    let newEducationsArray = [...educationDetails.educations];
-    newEducationsArray = newEducationsArray.map((education) => {
-      if (education.id !== currentEducationBeingFilled.id) {
-        return education;
-      }
-      return currentEducationBeingFilled;
-    });
-    setEducationDetails({
-      ...educationDetails,
-      educations: newEducationsArray,
-      currentEducationBeingFilled: {
-        id: null,
-        school: "",
-        degree: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        isVisible: true,
-      },
-      isFormOpen: false,
-    });
-  }
-  function deleteEducation() {
-    if (currentEducationBeingFilled.id === null) {
-      closeForm();
-      return;
-    }
-    let newEducationsArray = [...educationDetails.educations].filter(
-      (education) => currentEducationBeingFilled.id !== education.id
+    addFormNew(
+      setEducationDetails,
+      educationDetails,
+      "currentEducationBeingFilled",
+      "educations",
+      initialCurrentEducationDetails
     );
-    resolveId(newEducationsArray);
-    setEducationDetails({
-      ...educationDetails,
-      educations: newEducationsArray,
-      isFormOpen: false,
-      currentEducationBeingFilled: {
-        id: null,
-        school: "",
-        degree: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        isVisible: true,
-      },
-    });
+  }
+
+  function deleteEducation() {
+    deleteField(
+      educationDetails,
+      setEducationDetails,
+      "currentEducationBeingFilled",
+      "educations",
+      initialCurrentEducationDetails
+    );
   }
   return (
     <div className="education-form">
@@ -256,26 +213,23 @@ function EducationForm({ educationDetails, setEducationDetails }) {
     </div>
   );
 }
+
 function Educations({ educationDetails, setEducationDetails }) {
   function editEducation(education) {
-    setEducationDetails({
-      ...educationDetails,
-      currentEducationBeingFilled: { ...education },
-      isFormOpen: true,
-    });
+    openAndEditFieldInForm(
+      education,
+      "currentEducationBeingFilled",
+      educationDetails,
+      setEducationDetails
+    );
   }
   function changeEducationVisibility(changedEducation) {
-    let newVisibilityValue = changedEducation.isVisible ? false : true;
-    let newEducationsArray = educationDetails.educations.map((education) => {
-      if (education.id === changedEducation.id) {
-        return { ...education, isVisible: newVisibilityValue };
-      }
-      return education;
-    });
-    setEducationDetails({
-      ...educationDetails,
-      educations: newEducationsArray,
-    });
+    changeVisibilityOfField(
+      changedEducation,
+      "educations",
+      educationDetails,
+      setEducationDetails
+    );
   }
   return (
     <div className="rendered-educations">
@@ -283,7 +237,7 @@ function Educations({ educationDetails, setEducationDetails }) {
         return (
           <Fragment key={education.id}>
             <div className="education">
-              <h3 onClick={() => editEducation(education)}>
+              <h3 onClick={() => editEducation(education)} className="hover">
                 {education.school !== "" ? education.school : "Nil"}
               </h3>
               <img
@@ -295,6 +249,7 @@ function Educations({ educationDetails, setEducationDetails }) {
                 onClick={() => {
                   changeEducationVisibility(education);
                 }}
+                className="hover"
               />
             </div>
           </Fragment>
@@ -319,7 +274,9 @@ function AddEducationButton({ educationDetails, setEducationDetails }) {
   );
 }
 
-// Experience Section
+/** Main Education Section */
+
+/** Main Experience Section */
 export function ExperienceSection({ experienceDetails, setExperienceDetails }) {
   function openCloseExperience() {
     let newStatus = experienceDetails.isExperienceOpen ? false : true;
@@ -360,97 +317,33 @@ function ExperienceForm({ experienceDetails, setExperienceDetails }) {
     });
   }
   function closeForm() {
-    setExperienceDetails({
-      ...experienceDetails,
-      isFormOpen: false,
-      currentExperienceBeingFilled: {
-        id: null,
-        company: "",
-        position: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        description: "",
-        isVisible: true,
-      },
-    });
-    return;
+    closeFormNew(
+      setExperienceDetails,
+      experienceDetails,
+      "currentExperienceBeingFilled",
+      initialCurrentExperienceDetails
+    );
   }
   function addExperience() {
-    if (current.id === null) {
-      let newExperiencesArray = [...experienceDetails.experiences];
-      newExperiencesArray.push({
-        ...current,
-        id: `${experienceDetails.experiences.length + 1}`,
-      });
-      setExperienceDetails({
-        ...experienceDetails,
-        experiences: newExperiencesArray,
-        isFormOpen: false,
-        currentExperienceBeingFilled: {
-          id: null,
-          company: "",
-          position: "",
-          startDate: "",
-          endDate: "",
-          location: "",
-          description: "",
-          isVisible: true,
-        },
-      });
-      return;
-    }
-    let newExperiencesArray = [...experienceDetails.experiences].map(
-      (experience) => {
-        if (experience.id === current.id) {
-          return current;
-        }
-        return experience;
-      }
+    addFormNew(
+      setExperienceDetails,
+      experienceDetails,
+      "currentExperienceBeingFilled",
+      "experiences",
+      initialCurrentExperienceDetails
     );
-    setExperienceDetails({
-      ...experienceDetails,
-      experiences: newExperiencesArray,
-      isFormOpen: false,
-      currentExperienceBeingFilled: {
-        id: null,
-        company: "",
-        position: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        description: "",
-        isVisible: true,
-      },
-    });
   }
+
   function deleteExperience() {
-    if (current.id === null) {
-      closeForm();
-      return;
-    }
-    let newExperiencesArray = [...experienceDetails.experiences].filter(
-      (experience) => {
-        return experience.id !== current.id;
-      }
+    deleteField(
+      experienceDetails,
+      setExperienceDetails,
+      "currentExperienceBeingFilled",
+      "experiences",
+      initialCurrentExperienceDetails
     );
-    resolveId(newExperiencesArray);
-    setExperienceDetails({
-      ...experienceDetails,
-      isFormOpen: false,
-      currentExperienceBeingFilled: {
-        id: null,
-        company: "",
-        position: "",
-        startDate: "",
-        endDate: "",
-        location: "",
-        description: "",
-        isVisible: true,
-      },
-      experiences: newExperiencesArray,
-    });
   }
+
   return (
     <div className="experience-form">
       <label htmlFor="company">Company</label>
@@ -532,29 +425,21 @@ function ExperienceForm({ experienceDetails, setExperienceDetails }) {
   );
 }
 function Experiences({ experienceDetails, setExperienceDetails }) {
-  function changeVisibility(changedExperience) {
-    let newVisibility = changedExperience.isVisible ? false : true;
-    let newExperiencesArray = [...experienceDetails.experiences].map(
-      (experience) => {
-        if (experience.id === changedExperience.id) {
-          return { ...experience, isVisible: newVisibility };
-        }
-        return experience;
-      }
-    );
-    setExperienceDetails({
-      ...experienceDetails,
-      experiences: newExperiencesArray,
-    });
-  }
   function editExperience(experience) {
-    let newCurrent = { ...experience };
-    setExperienceDetails({
-      ...experienceDetails,
-      isFormOpen: true,
-      currentExperienceBeingFilled: newCurrent,
-    });
-    return;
+    openAndEditFieldInForm(
+      experience,
+      "currentEducationBeingFilled",
+      experienceDetails,
+      setExperienceDetails
+    );
+  }
+  function changeExperienceVisibility(changedExperience) {
+    changeVisibilityOfField(
+      changedExperience,
+      "experiences",
+      experienceDetails,
+      setExperienceDetails
+    );
   }
   return (
     <div className="rendered-experiences">
@@ -563,6 +448,7 @@ function Experiences({ experienceDetails, setExperienceDetails }) {
           <Fragment key={experience.id}>
             <div className="experience">
               <h3
+                className="hover"
                 onClick={() => {
                   editExperience(experience);
                 }}
@@ -576,8 +462,9 @@ function Experiences({ experienceDetails, setExperienceDetails }) {
                 width="25px"
                 alt="not show,experience-name on resume"
                 onClick={() => {
-                  changeVisibility(experience);
+                  changeExperienceVisibility(experience);
                 }}
+                className="hover"
               />
             </div>
           </Fragment>
@@ -598,8 +485,4 @@ function AddExperienceButton({ experienceDetails, setExperienceDetails }) {
     </div>
   );
 }
-function resolveId(array) {
-  for (let i = 0; i < array.length; i++) {
-    array[i].id = `${i}`;
-  }
-}
+/** Main Experience Section */

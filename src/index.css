@@ -345,3 +345,18 @@ body {
 #root .resume {
   align-self: start;
 }
+/*Final Placing of The Elements on the page*/
+
+/** styling elements for hovering effect **/
+
+/** styling elements for hovering effect **/
+button:hover {
+  cursor: pointer;
+}
+.experience-section > h2:hover {
+  cursor: pointer;
+}
+
+.hover:hover {
+  cursor: pointer;
+}
