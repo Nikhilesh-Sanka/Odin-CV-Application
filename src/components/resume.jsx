@@ -12,7 +12,7 @@ export function Resume(props) {
 function Header({ personalDetails }) {
   return (
     <div className="resume-header">
-      <h1>{personalDetails.fullName}</h1>
+      <h1>{personalDetails.fullName + "fuck"}</h1>
       <div>
         <div>
           <img src="/mail-icon.svg" width="25px" alt="" />
